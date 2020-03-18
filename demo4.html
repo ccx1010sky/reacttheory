@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+      firstname: <br />
+      <input type="text" id="input" />
+      <p id="error" style="color:red">输入字数不超过10个</p>
+      <button id="clearError">X</button>
+
+      <script>
+        var input = document.getElementById("input");
+        var errorMsg = document.getElementById("error");
+
+        var state = {
+          value: "",
+          error: false
+        };
+        //setState->state->render()
+        var setState = function(newState) {
+          state = {
+            //...表示数组解构，新旧的State进行比较，更新与合并
+            ...state,
+            ...newState
+          };
+          render();
+        };
+
+        //render函数中需要处理State中的状态的变化，
+        //一个是value的变化，一个是error的变化。
+        var render = function() {
+          input.value = state.value;
+          if (state.error) {
+            errorMsg.style.display = "block";
+          } else {
+            errorMsg.style.display = "none";
+          }
+        };
+
+        //以下函数处理输入数据与相应的状态改变
+        var handleInput = function(value) {
+          if (value.length < 10) {
+            //输入数据的长度变化导致了state的中的value与error的变化
+            setState({
+              value: value,
+              error: false
+            });
+          } else {
+            setState({
+              error: true
+            });
+          }
+        };
+
+        //element.addEventListener->click->function(){}->setState
+        input.addEventListener("input", function() {
+          //handleInput(this.value)调用作为事件函数匿名函数中的函数体
+          //使用handleInput来处理input的输入数据，并做状态改变
+          handleInput(this.value);
+        });
+
+        document
+          .getElementById("clearError")
+          .addEventListener("click", function() {
+            setState({
+              error: false
+            });
+          });
+
+        // 总结：客户端输入的input.value先赋值个中转站state.value，然后再由state.value 重新赋回 input.value。思路：由state.value来掌控状态的改变。
+
+        //  总结：
+        // html -> elment .Eventlistener -> click触发事件 -> function(){} ->setState ->  state -> render() ->  html     形成循环
+      </script>
+    </div>
+  </body>
+</html>

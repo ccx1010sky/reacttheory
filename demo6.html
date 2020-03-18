@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- 对模式进行一个组件式的包装 -->
+
+    <!-- //根root目录 -->
+    <div id="root"></div>
+
+    <script>
+
+        //创建一个DOM的 root元素实例
+        var root = document.getElementById("root");
+
+    
+
+        // 1，包装一个按钮类
+        class Button {
+            // 每个函数（包含构造函数）内部都有一个this，指向类button class，谁创建实例并调用此函数，this就指向谁
+            constructor() {
+            
+                this.state = {
+                    like: false
+                };
+                // this.render();
+            }
+
+            //每个函数内部都有一个this，指向类button class，谁创建实例并调用此函数，this就指向谁
+            setState(newState) {
+              this.state = {
+                ...this.state,
+                ...newState
+              };
+            }
+
+            //这是类中的函数定义采取以下方式
+            render() {
+                const state = this.state;
+        //$()只用在``中，必须加$，并且{}中是js表达式
+                return `
+<button type="button" style="color:${state.like ? "red" : "black"}">
+      ${state.like ? "已赞" : "喜欢"}
+      </button>
+      <p>你好</P>
+        `
+            }
+        }
+
+        //2，包装一个title类
+        class Title {
+
+            constructor() {
+    
+                this.state = {
+                    text: "this is title"
+                }
+            }
+
+              setState(newState){
+                  this.state={
+                      ...state,
+                      ...newState
+                  }
+
+              }
+
+            render() {
+                //return字符串类型
+                return `
+                //$()只用在``中，必须加$，并且{}中是js表达式
+             <h1> ${this.state.text} </h1>
+                `
+
+            }
+
+        }
+
+
+
+        root.innerHTML = new Button().render();
+        //3，把组件button，title打包入 wrap类
+        class Wrap {
+            //构建一个空的构造函数,如果是空的构造函数可以省略不写
+            constructor() {
+
+            }
+            render() {
+
+                //return到render()函数的是字符串类型
+                return `
+               ${new Button().render()}
+               ${new Title().render()}
+               ${new Button().render()}
+               ${new Button().render()}
+               ${new Button().render()}
+               ${new Button().render()}
+
+            `
+            }
+
+        }
+        //4，渲染到root下
+        root.innerHTML = new Wrap().render()
+
+
+
+
+
+
+
+
+
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <label for="demo">first name:</label><br />
+    <input type="text" id="demo" name="first" value="" />
+    <br />
+    <button type="button" id="like">喜欢</button>
+
+    <script>
+
+    // 建立两个对象元素
+      var input = document.getElementById("demo");
+      var likeBtn = document.getElementById("like");
+     //一个state函数，共用的，内中放状态值
+      var state = {
+        value: "",
+        like:false
+      };
+     //一个setState函数
+      var setState = function(newState) {
+        state = {
+          ...state,
+          ...newState
+        }
+        render1()
+        render2()
+      }
+      //两个render函数
+      var render1 = function() {
+          //把经过改变之后的state.value 最终赋值给input.value
+        input.value = state.value;
+      }
+
+      var render2 = function () {
+            if (state.like) {
+                likeBtn.innerHTML = "已赞";
+                likeBtn.style.color = "red";
+            } else {
+                likeBtn.innerHTML = "喜欢";
+                likeBtn.style.color = "black";
+            }
+        }
+    // 两个eventlistener
+      input.addEventListener("input", function() {
+          //setState()函数的调用作为事件函数中匿名函数的函数体
+        setState({
+          value: this.value
+        })
+      })
+    // 举例：  使用指定函数给元素添加事件处理
+    //     事件绑定使用addEventListener函数
+    //     var btn = document.getElementById("btn");
+    //     btn.addEventListener("click", function () {
+    //         console.log(this);
+    //         console.log(this == btn);//true
+    // this指的就是btn
+
+      likeBtn.addEventListener("click",function(){
+          setState({
+              like:!state.like
+          })
+
+      }
+      )
+    //  总结：先设置原始state状态，运用eventliestener接收状态改变，然后运用setState改变原始state的值并同时进行渲染render
+    </script>
+  </body>
+</html>
